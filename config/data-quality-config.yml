@@ -1,0 +1,130 @@
+# Data Quality Configuration for E-commerce Analytics Pipeline
+# Great Expectations validation settings
+
+database:
+  host: localhost
+  port: 5432
+  database: ecommerce_analytics
+  user: analytics_user
+  password: analytics_password
+
+validations:
+  raw_events:
+    enabled: true
+    checks:
+      - completeness
+      - uniqueness
+      - format
+      - business_rules
+    thresholds:
+      success_rate: 0.95
+      max_null_percentage: 0.05
+      min_unique_percentage: 0.99
+  
+  processed_events:
+    enabled: true
+    checks:
+      - completeness
+      - uniqueness
+      - format
+      - business_rules
+      - quality_score
+    thresholds:
+      success_rate: 0.98
+      min_quality_score: 0.8
+      max_null_percentage: 0.02
+  
+  daily_aggregations:
+    enabled: true
+    checks:
+      - completeness
+      - accuracy
+      - consistency
+      - business_rules
+    thresholds:
+      success_rate: 0.99
+      max_revenue_variance: 0.1
+      min_data_freshness_hours: 24
+
+expectation_suites:
+  raw_events_suite:
+    name: raw_events_suite
+    expectations:
+      - expect_column_values_to_not_be_null:
+          column: event_id
+      - expect_column_values_to_not_be_null:
+          column: event_type
+      - expect_column_values_to_not_be_null:
+          column: event_timestamp
+      - expect_column_values_to_be_unique:
+          column: event_id
+      - expect_column_values_to_be_in_set:
+          column: event_type
+          value_set: ["page_view", "add_to_cart", "purchase", "remove_from_cart", "wishlist_add"]
+      - expect_column_values_to_match_regex:
+          column: event_timestamp
+          regex: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}"
+  
+  processed_events_suite:
+    name: processed_events_suite
+    expectations:
+      - expect_column_values_to_not_be_null:
+          column: event_id
+      - expect_column_values_to_not_be_null:
+          column: event_type
+      - expect_column_values_to_not_be_null:
+          column: event_timestamp
+      - expect_column_values_to_not_be_null:
+          column: quality_score
+      - expect_column_values_to_be_unique:
+          column: event_id
+      - expect_column_values_to_be_between:
+          column: quality_score
+          min_value: 0.0
+          max_value: 1.0
+      - expect_column_values_to_be_greater_than:
+          column: quality_score
+          value: 0.8
+  
+  daily_aggregations_suite:
+    name: daily_aggregations_suite
+    expectations:
+      - expect_column_values_to_not_be_null:
+          column: date
+      - expect_column_values_to_not_be_null:
+          column: event_type
+      - expect_column_values_to_not_be_null:
+          column: total_events
+      - expect_column_values_to_be_greater_than:
+          column: total_events
+          value: 0
+      - expect_column_values_to_be_greater_than_or_equal_to:
+          column: total_revenue
+          value: 0
+      - expect_column_values_to_be_greater_than:
+          column: unique_users
+          value: 0
+
+alerts:
+  email:
+    enabled: false
+    recipients: []
+    smtp_server: ""
+    smtp_port: 587
+  
+  slack:
+    enabled: false
+    webhook_url: ""
+    channel: "#data-quality"
+  
+  webhook:
+    enabled: false
+    url: ""
+    headers: {}
+
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/data_quality.log"
+  max_size: 10MB
+  backup_count: 5 

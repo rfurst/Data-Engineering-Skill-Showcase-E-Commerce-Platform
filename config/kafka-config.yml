@@ -1,0 +1,38 @@
+kafka:
+  bootstrap_servers: localhost:9092
+  topics:
+    ecommerce_events: ecommerce-events
+    processed_events: processed-events
+    daily_aggregations: daily-aggregations
+    data_quality_alerts: data-quality-alerts
+  
+  producer_config:
+    acks: all
+    retries: 3
+    batch_size: 16384
+    linger_ms: 1
+    buffer_memory: 33554432
+    key_serializer: org.apache.kafka.common.serialization.StringSerializer
+    value_serializer: org.apache.kafka.common.serialization.StringSerializer
+  
+  consumer_config:
+    auto_offset_reset: earliest
+    enable_auto_commit: true
+    auto_commit_interval_ms: 1000
+    key_deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value_deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    group_id: ecommerce-analytics-group
+
+  topic_configs:
+    ecommerce_events:
+      partitions: 3
+      replication_factor: 1
+      retention_ms: 604800000  # 7 days
+    processed_events:
+      partitions: 3
+      replication_factor: 1
+      retention_ms: 2592000000  # 30 days
+    daily_aggregations:
+      partitions: 1
+      replication_factor: 1
+      retention_ms: 31536000000  # 1 year 

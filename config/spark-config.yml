@@ -1,0 +1,20 @@
+# Spark Configuration for E-commerce Analytics Pipeline
+kafka:
+  bootstrap_servers: localhost:9092
+  topic: ecommerce_events
+  group_id: analytics_consumer
+
+database:
+  host: localhost
+  port: 5432
+  database: ecommerce_analytics
+  user: analytics_user
+  password: analytics_password
+
+streaming:
+  batch_size: 100
+  processing_interval: 30
+
+spark:
+  app_name: EcommerceAnalyticsPipeline
+  checkpoint_location: /tmp/spark-checkpoints 

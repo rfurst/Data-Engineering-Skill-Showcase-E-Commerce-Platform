@@ -1,0 +1,24 @@
+# Dashboard Configuration for E-commerce Analytics Pipeline
+database:
+  host: localhost
+  port: 5432
+  database: ecommerce_analytics
+  user: analytics_user
+  password: analytics_password
+
+dashboard:
+  port: 5000
+  host: 0.0.0.0
+  debug: true
+  
+  # Update intervals (seconds)
+  metrics_update_interval: 5
+  historical_refresh_interval: 300  # 5 minutes
+  
+  # Chart settings
+  default_time_range_hours: 24
+  max_data_points: 100
+  
+  # Security settings
+  cors_enabled: true
+  allowed_origins: ["*"] 
