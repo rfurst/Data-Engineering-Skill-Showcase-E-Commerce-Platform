@@ -1,6 +1,6 @@
 # 🚀 E-commerce Analytics Pipeline
 
-A **production-ready, real-time data engineering solution** that demonstrates modern data engineering practices with Kafka, PostgreSQL, Airflow, and real-time analytics.
+A **production-ready, real-time data engineering solution** that demonstrates data engineering practices with Kafka, PostgreSQL, Airflow, and real-time analytics.
 
 ## 📊 Project Overview
 
