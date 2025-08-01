@@ -60,7 +60,7 @@ This project implements a complete **real-time e-commerce analytics pipeline** t
 ### 1. Clone the Repository
 ```bash
 git clone <your-repo-url>
-cd "Project GOAT"
+cd "Ecommerce-Platform"
 ```
 
 ### 2. Start Infrastructure
